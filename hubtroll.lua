@@ -1,49 +1,64 @@
 local Creator = "jefferyarthurs"
 
--- ==================== KEY + HWID SYSTEM ====================
+-- ==================== KEY SYSTEM (Исправлено) ====================
 getgenv().key = getgenv().key or "ВСТАВЬ_КЛЮЧ_СЮДА"
 
+-- ТВОЙ ОСНОВНОЙ КЛЮЧ
 local AllowedKeys = {
-    "dd5e3d91622fa2df36fcfcf6f25ee15f74f51e03a56fc11aac21a51268be960b", -- твой главный ключ
-    -- Новые ключи будут добавляться сюда
+    "dd5e3d91622fa2df36fcfcf6f25ee15f74f51e03a56fc11aac21a51268be960b",
+    -- Добавляй сюда другие ключи из сайта
 }
 
-local AllowedHWIDs = {
-    "AC1AE32E-9D10-49D9-93F5-67FA0158C163", -- твой HWID
-    -- HWID друзей будут добавляться сюда
-}
+print("=== DEBUG KEY ===")
+print("Ключ который ты ввёл: '" .. tostring(getgenv().key) .. "'")
+print("Длина ключа: " .. #tostring(getgenv().key))
 
 local function isValidKey(key)
-    for _, k in ipairs(AllowedKeys) do
-        if k == key then return true end
+    if not key or key == "" then return false end
+    for _, valid in ipairs(AllowedKeys) do
+        if valid == key then
+            print("✅ Ключ найден в списке!")
+            return true
+        end
     end
+    print("❌ Ключ НЕ найден в списке")
     return false
 end
 
--- Проверка ключа
-if not getgenv().key or getgenv().key == "" or getgenv().key == "ВСТАВЬ_КЛЮЧ_СЮДА" then
+-- ПРОВЕРКА
+if not getgenv().key or getgenv().key == "ВСТАВЬ_КЛЮЧ_СЮДА" then
+    print("❌ Ключ не установлен")
     game.Players.LocalPlayer:Kick("Invalid Key")
     return
 end
 
 if not isValidKey(getgenv().key) then
-    warn("❌ НЕВЕРНЫЙ КЛЮЧ")
-    game.StarterGui:SetCore("SendNotification", {Title = "Troll Hub"; Text = "Invalid Key!"; Duration = 5})
-    wait(1)
+    print("❌ НЕВЕРНЫЙ КЛЮЧ")
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Troll Hub";
+        Text = "Invalid Key! Проверь ключ.";
+        Duration = 10;
+    })
+    wait(2)
     game.Players.LocalPlayer:Kick("Invalid Key")
     return
 end
 
-print("✅ Ключ принят")
+print("✅ КЛЮЧ ПРИНЯТ УСПЕШНО!")
 
--- HWID проверка
+-- ==================== HWID CHECK ====================
 local function getHWID()
-    local success, hwid = pcall(function() return game:GetService("RbxAnalyticsService"):GetClientId() end)
+    local success, hwid = pcall(function()
+        return game:GetService("RbxAnalyticsService"):GetClientId()
+    end)
     if success and hwid then return hwid end
-    if gethwid then return gethwid() end
-    if syn and syn.get_hwid then return syn.get_hwid() end
     return "UNKNOWN"
 end
+
+local AllowedHWIDs = {
+    "AC1AE32E-9D10-49D9-93F5-67FA0158C163",
+    -- Добавляй HWID сюда
+}
 
 local MyHWID = getHWID()
 
@@ -53,14 +68,12 @@ if not table.find(AllowedHWIDs, MyHWID) then
     return
 end
 
-print("✅ HWID принят | Добро пожаловать!")
+print("✅ HWID ОК")
 
--- ==================== ОСНОВНОЙ СКРИПТ (только если всё прошло) ====================
-
+-- ==================== ОСНОВНОЙ СКРИПТ ====================
 print("====================================")
 print("Creator: " .. Creator)
 print("Username: " .. game.Players.LocalPlayer.Name)
-print("HWID: " .. MyHWID)
 print("====================================")
 
 -- Стикер
@@ -77,25 +90,22 @@ pcall(function()
     img.Parent = gui
 end)
 
--- Axe Hub
+-- Axe Hub + Infinite Yield + Watermark (оставил как было)
 pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/zeroidxx/axe-hub/refs/heads/main/axehub%20nds.txt"))()
 end)
 
--- Infinite Yield
 pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
 end)
 
 -- Watermark
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+local Camera = workspace.CurrentCamera
 local WatermarkBG = Drawing.new("Square")
 local WatermarkText = Drawing.new("Text")
-local Camera = workspace.CurrentCamera
-local RunService = game:GetService("RunService")
 local ExecutorName = identifyexecutor and identifyexecutor() or "Unknown"
-local PlayerName = LocalPlayer.Name
+local PlayerName = game.Players.LocalPlayer.Name
 
 local function UpdateWatermark()
     local timeText = os.date("%H:%M")
