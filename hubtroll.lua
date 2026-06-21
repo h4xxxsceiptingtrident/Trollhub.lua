@@ -1,63 +1,66 @@
 local Creator = "jefferyarthurs"
 
--- ==================== KEY SYSTEM (Исправлено) ====================
-getgenv().key = getgenv().key or "ВСТАВЬ_КЛЮЧ_СЮДА"
+-- ==================== KEY SYSTEM ====================
 
--- ТВОЙ ОСНОВНОЙ КЛЮЧ
+-- === ВСТАВЛЯЙ СВОЙ КЛЮЧ СЮДА (замени нули) ===
+getgenv().key = getgenv().key or "0000000000000000000000000000000000000000000000000000000000000000"
+
+-- Заготовки на 10 ключей (удобно для тебя и друзей)
 local AllowedKeys = {
-    "dd5e3d91622fa2df36fcfcf6f25ee15f74f51e03a56fc11aac21a51268be960b",
-    -- Добавляй сюда другие ключи из сайта
+    "dd5e3d91622fa2df36fcfcf6f25ee15f74f51e03a56fc11aac21a51268be960b", -- Твой основной ключ (не трогай)
+    
+    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 1
+    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 2
+    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 3
+    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 4
+    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 5
+    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 6
+    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 7
+    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 8
+    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 9
+    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 10
 }
 
-print("=== DEBUG KEY ===")
-print("Ключ который ты ввёл: '" .. tostring(getgenv().key) .. "'")
-print("Длина ключа: " .. #tostring(getgenv().key))
-
 local function isValidKey(key)
-    if not key or key == "" then return false end
     for _, valid in ipairs(AllowedKeys) do
         if valid == key then
-            print("✅ Ключ найден в списке!")
             return true
         end
     end
-    print("❌ Ключ НЕ найден в списке")
     return false
 end
 
--- ПРОВЕРКА
-if not getgenv().key or getgenv().key == "ВСТАВЬ_КЛЮЧ_СЮДА" then
-    print("❌ Ключ не установлен")
+-- ==================== ПРОВЕРКА КЛЮЧА ====================
+print("=== KEY CHECK ===")
+print("Введённый ключ: " .. tostring(getgenv().key))
+
+if not getgenv().key or getgenv().key == "" or getgenv().key == "0000000000000000000000000000000000000000000000000000000000000000" then
     game.Players.LocalPlayer:Kick("Invalid Key")
     return
 end
 
 if not isValidKey(getgenv().key) then
-    print("❌ НЕВЕРНЫЙ КЛЮЧ")
-    game.StarterGui:SetCore("SendNotification", {
-        Title = "Troll Hub";
-        Text = "Invalid Key! Проверь ключ.";
-        Duration = 10;
-    })
-    wait(2)
+    warn("❌ НЕВЕРНЫЙ КЛЮЧ!")
     game.Players.LocalPlayer:Kick("Invalid Key")
     return
 end
 
-print("✅ КЛЮЧ ПРИНЯТ УСПЕШНО!")
+print("✅ Ключ принят успешно!")
 
--- ==================== HWID CHECK ====================
+-- ==================== HWID LOCK ====================
 local function getHWID()
     local success, hwid = pcall(function()
         return game:GetService("RbxAnalyticsService"):GetClientId()
     end)
     if success and hwid then return hwid end
-    return "UNKNOWN"
+    if gethwid then return gethwid() end
+    if syn and syn.get_hwid then return syn.get_hwid() end
+    return "UNKNOWN_HWID"
 end
 
 local AllowedHWIDs = {
-    "AC1AE32E-9D10-49D9-93F5-67FA0158C163",
-    -- Добавляй HWID сюда
+    "AC1AE32E-9D10-49D9-93F5-67FA0158C163", -- Твой HWID
+    -- Добавляй HWID друзей сюда
 }
 
 local MyHWID = getHWID()
@@ -68,7 +71,7 @@ if not table.find(AllowedHWIDs, MyHWID) then
     return
 end
 
-print("✅ HWID ОК")
+print("✅ HWID проверка пройдена!")
 
 -- ==================== ОСНОВНОЙ СКРИПТ ====================
 print("====================================")
@@ -90,22 +93,25 @@ pcall(function()
     img.Parent = gui
 end)
 
--- Axe Hub + Infinite Yield + Watermark (оставил как было)
+-- Axe Hub
 pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/zeroidxx/axe-hub/refs/heads/main/axehub%20nds.txt"))()
 end)
 
+-- Infinite Yield
 pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
 end)
 
 -- Watermark
-local RunService = game:GetService("RunService")
-local Camera = workspace.CurrentCamera
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 local WatermarkBG = Drawing.new("Square")
 local WatermarkText = Drawing.new("Text")
+local Camera = workspace.CurrentCamera
+local RunService = game:GetService("RunService")
 local ExecutorName = identifyexecutor and identifyexecutor() or "Unknown"
-local PlayerName = game.Players.LocalPlayer.Name
+local PlayerName = LocalPlayer.Name
 
 local function UpdateWatermark()
     local timeText = os.date("%H:%M")
