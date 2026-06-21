@@ -1,5 +1,43 @@
 local Creator = "jefferyarthurs"
 
+-- ==================== KEY SYSTEM ====================
+getgenv().key = getgenv().key or "ВСТАВЬ_КЛЮЧ_СЮДА"
+
+local AllowedKeys = {
+    "dd5e3d91622fa2df36fcfcf6f25ee15f74f51e03a56fc11aac21a51268be960b", -- твой основной ключ
+    -- Добавляй сюда новые ключи, которые выдаёшь друзьям
+}
+
+local function isValidKey(key)
+    for _, validKey in ipairs(AllowedKeys) do
+        if key == validKey then
+            return true
+        end
+    end
+    return false
+end
+
+-- Проверка ключа
+if not getgenv().key or getgenv().key == "" or getgenv().key == "ВСТАВЬ_КЛЮЧ_СЮДА" then
+    warn("❌ Ключ не указан!")
+    game.Players.LocalPlayer:Kick("Invalid Key")
+    return
+end
+
+if not isValidKey(getgenv().key) then
+    warn("❌ НЕВЕРНЫЙ КЛЮЧ!")
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Troll Hub";
+        Text = "Invalid Key!";
+        Duration = 8;
+    })
+    wait(1)
+    game.Players.LocalPlayer:Kick("Invalid Key")
+    return
+end
+
+print("✅ Ключ принят!")
+
 -- ==================== HWID LOCK ====================
 local function getHWID()
     local success, hwid = pcall(function()
@@ -8,13 +46,12 @@ local function getHWID()
     if success and hwid and hwid ~= "" then
         return hwid
     end
-    
     if gethwid then return gethwid() end
     if syn and syn.get_hwid then return syn.get_hwid() end
     return "UNKNOWN_HWID"
 end
 
-local AllowedHWID = "AC1AE32E-9D10-49D9-93F5-67FA0158C163"  -- ← Твой HWID уже вставлен
+local AllowedHWID = "AC1AE32E-9D10-49D9-93F5-67FA0158C163"
 
 local MyHWID = getHWID()
 
@@ -23,15 +60,17 @@ print("Creator: " .. Creator)
 print("Username: " .. game.Players.LocalPlayer.Name)
 print("Executor: " .. (identifyexecutor and identifyexecutor() or "Unknown"))
 print("HWID: " .. MyHWID)
+print("Key: " .. getgenv().key:sub(1, 20) .. "...")
 print("====================================")
 
 if MyHWID ~= AllowedHWID then
     warn("❌ HWID НЕ СОВПАДАЕТ!")
-    warn("Ожидался: " .. AllowedHWID)
-    warn("Получен: " .. MyHWID)
-else
-    print("✅ HWID проверка пройдена! Скрипт запущен.")
+    game.Players.LocalPlayer:Kick("HWID Mismatch")
+    return
 end
+
+print("✅ HWID проверка пройдена! Скрипт запущен.")
+-- ==================== HWID END ====================
 
 -- ==================== ОСТАЛЬНОЙ СКРИПТ ====================
 
