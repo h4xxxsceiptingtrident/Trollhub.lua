@@ -1,37 +1,29 @@
 local Creator = "jefferyarthurs"
 
 -- ==================== KEY SYSTEM ====================
-getgenv().key = getgenv().key or "ВСТАВЬ_КЛЮЧ_СЮДА"
+getgenv().key = getgenv().key or "02b7dd2e6309b7f4e6a36aa827f84fbe5452a6595665adc52220ae137cfc63c8"
 
 local AllowedKeys = {
-    "dd5e3d91622fa2df36fcfcf6f25ee15f74f51e03a56fc11aac21a51268be960b", -- старый
-    "02b7dd2e6309b7f4e6a36aa827f84fbe5452a6595665adc52220ae137cfc63c8", -- ← ТВОЙ НОВЫЙ КЛЮЧ
+    "dd5e3d91622fa2df36fcfcf6f25ee15f74f51e03a56fc11aac21a51268be960b",
+    "02b7dd2e6309b7f4e6a36aa827f84fbe5452a6595665adc52220ae137cfc63c8"  -- твой ключ
 }
 
 print("=== KEY DEBUG ===")
-print("Введённый ключ: " .. tostring(getgenv().key))
-print("Длина: " .. #tostring(getgenv().key))
+print("getgenv().key =", tostring(getgenv().key))
+print("Длина ключа =", #tostring(getgenv().key))
 
 local function isValidKey(key)
-    for _, valid in ipairs(AllowedKeys) do
-        if valid == key then
+    for _, k in ipairs(AllowedKeys) do
+        if k == key then
             print("✅ Ключ совпал!")
             return true
         end
     end
-    print("❌ Ключ не найден в списке")
     return false
 end
 
--- Проверка ключа
-if not getgenv().key or getgenv().key == "" or getgenv().key == "ВСТАВЬ_КЛЮЧ_СЮДА" then
-    print("❌ Ключ не введён")
-    game.Players.LocalPlayer:Kick("Invalid Key")
-    return
-end
-
-if not isValidKey(getgenv().key) then
-    print("❌ НЕВЕРНЫЙ КЛЮЧ")
+if not getgenv().key or not isValidKey(getgenv().key) then
+    print("❌ НЕВЕРНЫЙ ИЛИ ПУСТОЙ КЛЮЧ")
     game.Players.LocalPlayer:Kick("Invalid Key")
     return
 end
@@ -48,27 +40,26 @@ local function getHWID()
 end
 
 local AllowedHWIDs = {
-    "AC1AE32E-9D10-49D9-93F5-67FA0158C163", -- твой
-    -- Добавляй другие HWID сюда
+    "AC1AE32E-9D10-49D9-93F5-67FA0158C163"
 }
 
 local MyHWID = getHWID()
 
 if not table.find(AllowedHWIDs, MyHWID) then
-    warn("❌ HWID НЕ РАЗРЕШЁН")
     game.Players.LocalPlayer:Kick("HWID Access Denied")
     return
 end
 
 print("✅ HWID OK")
 
--- ==================== ЗАПУСК СКРИПТА ====================
+-- ==================== ОСНОВНОЙ СКРИПТ ====================
 print("====================================")
+print("Troll Hub запущен успешно!")
 print("Creator: " .. Creator)
 print("Username: " .. game.Players.LocalPlayer.Name)
 print("====================================")
 
--- Стикер
+-- Стикер, Axe, Infinite, Watermark...
 pcall(function()
     local gui = Instance.new("ScreenGui")
     gui.Name = "StickerGui"
@@ -82,12 +73,10 @@ pcall(function()
     img.Parent = gui
 end)
 
--- Axe Hub
 pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/zeroidxx/axe-hub/refs/heads/main/axehub%20nds.txt"))()
 end)
 
--- Infinite Yield
 pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
 end)
