@@ -1,78 +1,67 @@
 local Creator = "jefferyarthurs"
 
--- ==================== KEY SYSTEM ====================
+-- ==================== KEY + HWID SYSTEM ====================
 getgenv().key = getgenv().key or "ВСТАВЬ_КЛЮЧ_СЮДА"
 
 local AllowedKeys = {
-    "dd5e3d91622fa2df36fcfcf6f25ee15f74f51e03a56fc11aac21a51268be960b", -- твой основной ключ
-    -- Добавляй сюда новые ключи, которые выдаёшь друзьям
+    "dd5e3d91622fa2df36fcfcf6f25ee15f74f51e03a56fc11aac21a51268be960b", -- твой главный ключ
+    -- Новые ключи будут добавляться сюда
+}
+
+local AllowedHWIDs = {
+    "AC1AE32E-9D10-49D9-93F5-67FA0158C163", -- твой HWID
+    -- HWID друзей будут добавляться сюда
 }
 
 local function isValidKey(key)
-    for _, validKey in ipairs(AllowedKeys) do
-        if key == validKey then
-            return true
-        end
+    for _, k in ipairs(AllowedKeys) do
+        if k == key then return true end
     end
     return false
 end
 
 -- Проверка ключа
 if not getgenv().key or getgenv().key == "" or getgenv().key == "ВСТАВЬ_КЛЮЧ_СЮДА" then
-    warn("❌ Ключ не указан!")
     game.Players.LocalPlayer:Kick("Invalid Key")
     return
 end
 
 if not isValidKey(getgenv().key) then
-    warn("❌ НЕВЕРНЫЙ КЛЮЧ!")
-    game.StarterGui:SetCore("SendNotification", {
-        Title = "Troll Hub";
-        Text = "Invalid Key!";
-        Duration = 8;
-    })
+    warn("❌ НЕВЕРНЫЙ КЛЮЧ")
+    game.StarterGui:SetCore("SendNotification", {Title = "Troll Hub"; Text = "Invalid Key!"; Duration = 5})
     wait(1)
     game.Players.LocalPlayer:Kick("Invalid Key")
     return
 end
 
-print("✅ Ключ принят!")
+print("✅ Ключ принят")
 
--- ==================== HWID LOCK ====================
+-- HWID проверка
 local function getHWID()
-    local success, hwid = pcall(function()
-        return game:GetService("RbxAnalyticsService"):GetClientId()
-    end)
-    if success and hwid and hwid ~= "" then
-        return hwid
-    end
+    local success, hwid = pcall(function() return game:GetService("RbxAnalyticsService"):GetClientId() end)
+    if success and hwid then return hwid end
     if gethwid then return gethwid() end
     if syn and syn.get_hwid then return syn.get_hwid() end
-    return "UNKNOWN_HWID"
+    return "UNKNOWN"
 end
 
-local AllowedHWID = "AC1AE32E-9D10-49D9-93F5-67FA0158C163"
-
 local MyHWID = getHWID()
+
+if not table.find(AllowedHWIDs, MyHWID) then
+    warn("❌ HWID НЕ РАЗРЕШЁН")
+    game.Players.LocalPlayer:Kick("HWID Access Denied")
+    return
+end
+
+print("✅ HWID принят | Добро пожаловать!")
+
+-- ==================== ОСНОВНОЙ СКРИПТ (только если всё прошло) ====================
 
 print("====================================")
 print("Creator: " .. Creator)
 print("Username: " .. game.Players.LocalPlayer.Name)
-print("Executor: " .. (identifyexecutor and identifyexecutor() or "Unknown"))
 print("HWID: " .. MyHWID)
-print("Key: " .. getgenv().key:sub(1, 20) .. "...")
 print("====================================")
-
-if MyHWID ~= AllowedHWID then
-    warn("❌ HWID НЕ СОВПАДАЕТ!")
-    game.Players.LocalPlayer:Kick("HWID Mismatch")
-    return
-end
-
-print("✅ HWID проверка пройдена! Скрипт запущен.")
--- ==================== HWID END ====================
-
--- ==================== ОСТАЛЬНОЙ СКРИПТ ====================
 
 -- Стикер
 pcall(function()
@@ -111,7 +100,6 @@ local PlayerName = LocalPlayer.Name
 local function UpdateWatermark()
     local timeText = os.date("%H:%M")
     local fullText = string.format("Troll | %s | %s | %s", ExecutorName, PlayerName, timeText)
-    
     local size = Vector2.new(280, 26)
     local offset = 10
     
