@@ -1,66 +1,55 @@
 local Creator = "jefferyarthurs"
 
 -- ==================== KEY SYSTEM ====================
+getgenv().key = getgenv().key or "ВСТАВЬ_КЛЮЧ_СЮДА"
 
--- === ВСТАВЛЯЙ СВОЙ КЛЮЧ СЮДА (замени нули) ===
-getgenv().key = getgenv().key or "69325e9ee3ad3db061388fb3b51a5c3be13b0855b019b0586438f96be97344ed"
-
--- Заготовки на 10 ключей (удобно для тебя и друзей)
 local AllowedKeys = {
-    "69325e9ee3ad3db061388fb3b51a5c3be13b0855b019b0586438f96be97344ed", -- Твой основной ключ (не трогай)
-    
-    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 1
-    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 2
-    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 3
-    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 4
-    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 5
-    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 6
-    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 7
-    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 8
-    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 9
-    "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 10
+    "dd5e3d91622fa2df36fcfcf6f25ee15f74f51e03a56fc11aac21a51268be960b", -- старый
+    "02b7dd2e6309b7f4e6a36aa827f84fbe5452a6595665adc52220ae137cfc63c8", -- ← ТВОЙ НОВЫЙ КЛЮЧ
 }
+
+print("=== KEY DEBUG ===")
+print("Введённый ключ: " .. tostring(getgenv().key))
+print("Длина: " .. #tostring(getgenv().key))
 
 local function isValidKey(key)
     for _, valid in ipairs(AllowedKeys) do
         if valid == key then
+            print("✅ Ключ совпал!")
             return true
         end
     end
+    print("❌ Ключ не найден в списке")
     return false
 end
 
--- ==================== ПРОВЕРКА КЛЮЧА ====================
-print("=== KEY CHECK ===")
-print("Введённый ключ: " .. tostring(getgenv().key))
-
-if not getgenv().key or getgenv().key == "" or getgenv().key == "69325e9ee3ad3db061388fb3b51a5c3be13b0855b019b0586438f96be97344ed" then
+-- Проверка ключа
+if not getgenv().key or getgenv().key == "" or getgenv().key == "ВСТАВЬ_КЛЮЧ_СЮДА" then
+    print("❌ Ключ не введён")
     game.Players.LocalPlayer:Kick("Invalid Key")
     return
 end
 
 if not isValidKey(getgenv().key) then
-    warn("❌ НЕВЕРНЫЙ КЛЮЧ!")
+    print("❌ НЕВЕРНЫЙ КЛЮЧ")
     game.Players.LocalPlayer:Kick("Invalid Key")
     return
 end
 
-print("✅ Ключ принят успешно!")
+print("✅ Ключ принят!")
 
--- ==================== HWID LOCK ====================
+-- ==================== HWID ====================
 local function getHWID()
     local success, hwid = pcall(function()
         return game:GetService("RbxAnalyticsService"):GetClientId()
     end)
     if success and hwid then return hwid end
-    if gethwid then return gethwid() end
-    if syn and syn.get_hwid then return syn.get_hwid() end
-    return "UNKNOWN_HWID"
+    return "UNKNOWN"
 end
 
 local AllowedHWIDs = {
-    "AC1AE32E-9D10-49D9-93F5-67FA0158C163", -- Твой HWID
-    -- Добавляй HWID друзей сюда
+    "AC1AE32E-9D10-49D9-93F5-67FA0158C163", -- твой
+    -- Добавляй другие HWID сюда
 }
 
 local MyHWID = getHWID()
@@ -71,9 +60,9 @@ if not table.find(AllowedHWIDs, MyHWID) then
     return
 end
 
-print("✅ HWID проверка пройдена!")
+print("✅ HWID OK")
 
--- ==================== ОСНОВНОЙ СКРИПТ ====================
+-- ==================== ЗАПУСК СКРИПТА ====================
 print("====================================")
 print("Creator: " .. Creator)
 print("Username: " .. game.Players.LocalPlayer.Name)
@@ -104,14 +93,12 @@ pcall(function()
 end)
 
 -- Watermark
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+local Camera = workspace.CurrentCamera
 local WatermarkBG = Drawing.new("Square")
 local WatermarkText = Drawing.new("Text")
-local Camera = workspace.CurrentCamera
-local RunService = game:GetService("RunService")
 local ExecutorName = identifyexecutor and identifyexecutor() or "Unknown"
-local PlayerName = LocalPlayer.Name
+local PlayerName = game.Players.LocalPlayer.Name
 
 local function UpdateWatermark()
     local timeText = os.date("%H:%M")
