@@ -3,11 +3,11 @@ local Creator = "jefferyarthurs"
 -- ==================== KEY SYSTEM ====================
 
 -- === ВСТАВЛЯЙ СВОЙ КЛЮЧ СЮДА (замени нули) ===
-getgenv().key = getgenv().key or "0000000000000000000000000000000000000000000000000000000000000000"
+getgenv().key = getgenv().key or "69325e9ee3ad3db061388fb3b51a5c3be13b0855b019b0586438f96be97344ed"
 
 -- Заготовки на 10 ключей (удобно для тебя и друзей)
 local AllowedKeys = {
-    "02b7dd2e6309b7f4e6a36aa827f84fbe5452a6595665adc52220ae137cfc63c8", -- Твой основной ключ (не трогай)
+    "69325e9ee3ad3db061388fb3b51a5c3be13b0855b019b0586438f96be97344ed", -- Твой основной ключ (не трогай)
     
     "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 1
     "0000000000000000000000000000000000000000000000000000000000000000", -- Ключ 2
@@ -34,7 +34,7 @@ end
 print("=== KEY CHECK ===")
 print("Введённый ключ: " .. tostring(getgenv().key))
 
-if not getgenv().key or getgenv().key == "" or getgenv().key == "0000000000000000000000000000000000000000000000000000000000000000" then
+if not getgenv().key or getgenv().key == "" or getgenv().key == "69325e9ee3ad3db061388fb3b51a5c3be13b0855b019b0586438f96be97344ed" then
     game.Players.LocalPlayer:Kick("Invalid Key")
     return
 end
